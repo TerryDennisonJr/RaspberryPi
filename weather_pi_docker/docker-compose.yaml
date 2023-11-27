@@ -1,35 +1,11 @@
-version: "3.2"
+version: "3.7"
 services:
-    db:
-        container_name: weather_db
-        image: mysql:latest
-        volumes:
-           - type: bind
-             source: /home/td_pi4/weather_pi_docker/sql_setup 
-             target: /home/db-data
-        ports:
-            - 32001:3306
-        environment:
-            MYSQL_ROOT_PASSWORD: 'root'
-            MYSQL_DATABASE : 'weather_database'
-#        labels:
-#            com.datadoghq.ad.check_names: '["mysql"]'
-#            com.datadoghq.ad.init_configs: '[{}]'
-#            com.datadoghq.ad.instances: '[{"server": "%%host%%","user":"datadog","password":"Datadog2023", "connect_timeout": 180}]'
     app:
         container_name: weather_app
-        depends_on:
-          - db
-            #  condition: service_healthy
         build: ./
         ports:
             - 5001:5000
-        environment:
-            MYSQL_HOST: 'weather_db'
-            MYSQL_USER: 'root'
-            MYSQL_ROOT_PASSWORD: 'root'
-            MYSQL_DB: 'weather_database'
-
+        volumes:
+            - ./datapoints:/home/data
 volumes: 
-  db-data:
-
+  datapoints:

@@ -1,6 +1,5 @@
-FROM python:3.9
+FROM protik77/python3-sensehat:latest
+RUN curl  'https://bootstrap.pypa.io/pip/3.4/get-pip.py' -o get-pip.py && python3 get-pip.py && pip install datadog
 WORKDIR /home
-COPY pi_weather_docker.py ./
-RUN pip install mysql-connector-python pandas
-#SHELL ["bin/bash", "-c"]
-CMD ["python", "./pi_weather_docker.py"]
+COPY sensehat_weather_.py /home
+CMD ["python3", "./sensehat_weather_.py"]
