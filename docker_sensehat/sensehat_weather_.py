@@ -11,7 +11,7 @@ class Weather:
     self.humi_val = humi_val
     self.press_val = press_val
 
-with open("data/myfile.csv", "a") as f:
+with open("/data/myfile.csv", "a") as f:
 
     write = csv.writer(f)
     write.writerow(fields)
