@@ -1,18 +1,33 @@
-## Deploying Ubuntu and Mysql Container with Docker Compose:
+# Raspberry Pi 4 Docker Sensehat
+
+## Prerequisites:
+
+- mysql (on Host)
+  -  `sudo apt-get install mysql-shell`
+- docker
+- docker-compose
+
+## Deploying:
 ```
-sudo docker exec -it weather_sense bash
-sudo docker-compose stop app
 bash script.sh
 ```
 
-## Mysql Container Commands:
+# Notes:
+
+### Deploying Ubuntu and Mysql Container with Docker Compose:
+```
+sudo docker exec -it weather_sense bash
+sudo docker-compose stop app
+```
+
+### Mysql Container Commands:
 ```
 sudo docker exec -it weather_db bash
 mysql -uroot -proot
 ```
 
 
-## Mysql Commands:
+### Mysql Commands:
 ```
 SHOW DATABASES:
 use weather_database;
