@@ -9,7 +9,7 @@ services:
         ports:
             - "5001:5000"
         volumes:
-            - ./datapoints:/home/data
+            - ./data:/home/data
         links:
             - "mysql"
     mysql:
