@@ -1,0 +1,29 @@
+version: "3"
+services:
+    app:
+        container_name: d_mysql_sense
+        build: .
+        privileged: true
+        depends_on:
+            - "mysql"
+        ports:
+            - "5001:5000"
+        volumes:
+            - ./datapoints:/home/data
+        links:
+            - "mysql"
+    mysql:
+        image: mysql
+        container_name: weather_db
+        ports:
+            - "32001:3306"
+        environment:
+#            MYSQL_ROOT_USER: root
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_PORT: 3306
+#            MYSQL_HOST: '0.0.0.0'
+#            MYSQL_HOST: '192.168.96.2'
+            MYSQL_DATABASE: 'weather_database'
+
+volumes:
+  datapoints:
