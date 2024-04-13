@@ -17,6 +17,8 @@ bash script.sh
 ### Deploying Ubuntu and Mysql Container with Docker Compose:
 ```
 sudo docker exec -it weather_sense bash
+sudo docker-compose build && sudo docker-compose up -d
+
 sudo docker-compose stop app
 ```
 
