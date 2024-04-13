@@ -1,0 +1,39 @@
+version: "3.9"
+services:
+    app:
+        container_name: pi_sensehat
+        image: infinitiq502004/pi4_sensehat:v1.0
+        #build: .
+        privileged: true
+        depends_on:
+#            - "mysql"
+            mysql:
+#            weather_db_dd:
+                condition: "service_healthy"
+        ports:
+            - "5001:5000"
+        volumes:
+            - ./data:/home/data
+            - /var/run/datadog:/var/run/datadog:ro
+        links:
+            - "mysql"
+    mysql:
+        image: mysql
+        container_name: weather_db_dd
+        ports:
+            - "32001:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_PORT: 3306
+            MYSQL_DATABASE: 'weather_database'
+        healthcheck:
+            test: "/usr/bin/mysql --user=root --password=root --execute \"SHOW DATABASES;\""
+            start_period: 5s
+            timeout: 5s
+            retries: 20
+
+        labels:
+            com.datadoghq.ad.checks: '{"mysql": {"instances": [{"server": "%%host%%", "username": "datadog", "password": "dd_2024", "port": 3306, "reported_hostname": "pi4_db"}]}}'
+
+volumes:
+  datapoints:
