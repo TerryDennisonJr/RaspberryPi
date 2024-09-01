@@ -1,22 +1,21 @@
-version: "3.9"
+lsversion: "3.9"
 services:
     app:
         container_name: pi_sensehat
-        image: infinitiq502004/pi4_sensehat:v1.0
-        #build: .
+        image: infinitiq502004/pi4-sensehat:v3
         privileged: true
         depends_on:
-#            - "mysql"
             mysql:
-#            weather_db_dd:
                 condition: "service_healthy"
         ports:
             - "5001:5000"
         volumes:
             - ./data:/home/data
-            - /var/run/datadog:/var/run/datadog:ro
+            - /var/run/docker.sock:/var/run/datadog/dsd.socket:ro
         links:
             - "mysql"
+        environment:
+            - DD_AGENT_HOST=datadog
     mysql:
         image: mysql
         container_name: weather_db_dd
@@ -33,7 +32,23 @@ services:
             retries: 20
 
         labels:
-            com.datadoghq.ad.checks: '{"mysql": {"instances": [{"server": "%%host%%", "username": "datadog", "password": "dd_2024", "port": 3306, "reported_hostname": "pi4_db"}]}}'
+            com.datadoghq.ad.checks: '{"mysql": {"instances": [{"server": "%%host%%", "username": "datadog", "password": "dd_2024", "port": 3306}]}}'
+
+    datadog:
+      image: datadog/agent:latest
+      container_name: dd-agent
+      restart: always
+      pid: "host"
+      ports:
+        - 127.0.0.1:8125:8125/udp
+      environment:
+        - DD_API_KEY=<VALUE>
+        - DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true
+      privileged: true
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /proc/:/host/proc/:ro
+        - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
 
 volumes:
   datapoints:
